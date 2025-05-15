@@ -1,10 +1,5 @@
 import 'core/api_client.dart';
-import 'services/base/session_service_base.dart';
-import 'services/base/knowledge_service_base.dart';
-import 'services/base/secret_service_base.dart';
-import 'services/impl/default_session_service.dart';
-import 'services/impl/default_knowledge_service.dart';
-import 'services/impl/default_secret_service.dart';
+import 'services/services.dart';
 
 /// The main client for the Devin API
 class DevinClient {
@@ -24,9 +19,9 @@ class DevinClient {
   DevinClient({
     required String apiKey,
   }) : _apiClient = DevinApiClient(apiKey: apiKey) {
-    _sessionService = DefaultSessionService(apiClient: _apiClient);
-    _knowledgeService = DefaultKnowledgeService(apiClient: _apiClient);
-    _secretService = DefaultSecretService(apiClient: _apiClient);
+    _sessionService = SessionService(apiClient: _apiClient);
+    _knowledgeService = KnowledgeService(apiClient: _apiClient);
+    _secretService = SecretService(apiClient: _apiClient);
   }
   
   /// Gets the session service
