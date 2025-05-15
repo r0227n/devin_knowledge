@@ -1,7 +1,10 @@
 import 'core/api_client.dart';
-import 'services/session_service.dart';
-import 'services/knowledge_service.dart';
-import 'services/secret_service.dart';
+import 'services/base/session_service_base.dart';
+import 'services/base/knowledge_service_base.dart';
+import 'services/base/secret_service_base.dart';
+import 'services/impl/default_session_service.dart';
+import 'services/impl/default_knowledge_service.dart';
+import 'services/impl/default_secret_service.dart';
 
 /// The main client for the Devin API
 class DevinClient {
@@ -9,31 +12,31 @@ class DevinClient {
   final DevinApiClient _apiClient;
   
   /// The session service
-  late final SessionService _sessionService;
+  late final SessionServiceBase _sessionService;
   
   /// The knowledge service
-  late final KnowledgeService _knowledgeService;
+  late final KnowledgeServiceBase _knowledgeService;
   
   /// The secret service
-  late final SecretService _secretService;
+  late final SecretServiceBase _secretService;
   
   /// Creates a new [DevinClient]
   DevinClient({
     required String apiKey,
   }) : _apiClient = DevinApiClient(apiKey: apiKey) {
-    _sessionService = SessionService(apiClient: _apiClient);
-    _knowledgeService = KnowledgeService(apiClient: _apiClient);
-    _secretService = SecretService(apiClient: _apiClient);
+    _sessionService = DefaultSessionService(apiClient: _apiClient);
+    _knowledgeService = DefaultKnowledgeService(apiClient: _apiClient);
+    _secretService = DefaultSecretService(apiClient: _apiClient);
   }
   
   /// Gets the session service
-  SessionService get sessions => _sessionService;
+  SessionServiceBase get sessions => _sessionService;
   
   /// Gets the knowledge service
-  KnowledgeService get knowledge => _knowledgeService;
+  KnowledgeServiceBase get knowledge => _knowledgeService;
   
   /// Gets the secret service
-  SecretService get secrets => _secretService;
+  SecretServiceBase get secrets => _secretService;
   
   /// Closes the client
   void close() {

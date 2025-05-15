@@ -6,21 +6,21 @@ void main() async {
 
   try {
     // List sessions
-    final sessions = await client.sessions.listSessions();
+    final sessions = await client.sessions.list();
     print('Sessions: ${sessions.items.length}');
 
     // Create a new session
-    final newSession = await client.sessions.createSession(
+    final newSession = await client.sessions.create(
       CreateSessionRequest(name: 'Test Session'),
     );
     print('Created session: ${newSession.id}');
 
     // List knowledge items
-    final knowledgeItems = await client.knowledge.listKnowledge();
+    final knowledgeItems = await client.knowledge.list();
     print('Knowledge items: ${knowledgeItems.items.length}');
 
     // Create a new knowledge item
-    final newKnowledge = await client.knowledge.createKnowledge(
+    final newKnowledge = await client.knowledge.create(
       CreateKnowledgeRequest(
         title: 'Test Knowledge',
         content: 'This is a test knowledge item',
@@ -29,7 +29,7 @@ void main() async {
     print('Created knowledge item: ${newKnowledge.id}');
 
     // List secrets
-    final secrets = await client.secrets.listSecrets();
+    final secrets = await client.secrets.list();
     print('Secrets: ${secrets.items.length}');
   } on DevinApiException catch (e) {
     print('API error: ${e.message}');
