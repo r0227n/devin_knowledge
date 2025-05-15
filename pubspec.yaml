@@ -1,0 +1,9 @@
+name: workspace
+publish_to: none
+
+environment:
+  sdk: ^3.6.0
+
+workspace:
+  - packages/devin_api
+  - apps/knowledge_editor
