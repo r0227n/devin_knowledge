@@ -1,8 +1,14 @@
-/// Support for doing something awesome.
+/// Dart client library for the Devin API.
 ///
-/// More dartdocs go here.
+/// This library provides a client for interacting with the Devin API.
 library;
 
-export 'src/devin_api_base.dart';
+// Core
+export 'src/devin_client.dart';
+export 'src/core/api_exception.dart';
 
-// TODO: Export any libraries intended for clients of this package.
+// Models
+export 'src/models/session/session.dart';
+export 'src/models/knowledge/knowledge.dart';
+export 'src/models/secret/secret.dart';
+export 'src/models/pagination/pagination.dart';
