@@ -14,4 +14,6 @@ export 'src/models/secret/secret.dart';
 export 'src/models/pagination/pagination.dart';
 
 // Service interfaces
-export 'src/services/services.dart';
+export 'src/services/session_service.dart';
+export 'src/services/knowledge_service.dart';
+export 'src/services/secret_service.dart';
