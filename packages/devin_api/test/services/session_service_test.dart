@@ -15,7 +15,10 @@ void main() {
     setUp(() {
       mockHttpClient = MockHttpClient();
       mockResponse = MockResponse();
-      apiClient = DevinApiClient(apiKey: 'test-api-key', httpClient: mockHttpClient);
+      apiClient = DevinApiClient(
+        apiKey: 'test-api-key',
+        httpClient: mockHttpClient,
+      );
       sessionService = SessionService(apiClient: apiClient);
 
       when(() => mockResponse.statusCode).thenReturn(200);
@@ -42,19 +45,16 @@ void main() {
               'updated_at': '2023-01-04T00:00:00Z',
             },
           ],
-          'page_info': {
-            'total': 2,
-            'limit': 10,
-            'page': 1,
-            'has_more': false,
-          },
+          'page_info': {'total': 2, 'limit': 10, 'page': 1, 'has_more': false},
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(() => mockHttpClient.get(
-              Uri.parse('https://api.devin.ai/api/sessions?page=1&limit=10'),
-              headers: any(named: 'headers'),
-            )).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.get(
+            Uri.parse('https://api.devin.ai/api/sessions?page=1&limit=10'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => mockResponse);
 
         // Act
         final result = await sessionService.list(page: 1, limit: 10);
@@ -68,10 +68,12 @@ void main() {
         expect(result.pageInfo.page, equals(1));
         expect(result.pageInfo.hasMore, equals(false));
 
-        verify(() => mockHttpClient.get(
-              Uri.parse('https://api.devin.ai/api/sessions?page=1&limit=10'),
-              headers: any(named: 'headers'),
-            )).called(1);
+        verify(
+          () => mockHttpClient.get(
+            Uri.parse('https://api.devin.ai/api/sessions?page=1&limit=10'),
+            headers: any(named: 'headers'),
+          ),
+        ).called(1);
       });
     });
 
@@ -87,10 +89,12 @@ void main() {
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(() => mockHttpClient.get(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1'),
-              headers: any(named: 'headers'),
-            )).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.get(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => mockResponse);
 
         // Act
         final result = await sessionService.get('session-1');
@@ -99,13 +103,21 @@ void main() {
         expect(result.id, equals('session-1'));
         expect(result.name, equals('Test Session'));
         expect(result.status, equals('active'));
-        expect(result.createdAt, equals(DateTime.parse('2023-01-01T00:00:00Z')));
-        expect(result.updatedAt, equals(DateTime.parse('2023-01-02T00:00:00Z')));
+        expect(
+          result.createdAt,
+          equals(DateTime.parse('2023-01-01T00:00:00Z')),
+        );
+        expect(
+          result.updatedAt,
+          equals(DateTime.parse('2023-01-02T00:00:00Z')),
+        );
 
-        verify(() => mockHttpClient.get(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1'),
-              headers: any(named: 'headers'),
-            )).called(1);
+        verify(
+          () => mockHttpClient.get(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1'),
+            headers: any(named: 'headers'),
+          ),
+        ).called(1);
       });
     });
 
@@ -122,11 +134,13 @@ void main() {
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(() => mockHttpClient.post(
-              Uri.parse('https://api.devin.ai/api/sessions'),
-              headers: any(named: 'headers'),
-              body: any(named: 'body'),
-            )).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.post(
+            Uri.parse('https://api.devin.ai/api/sessions'),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer((_) async => mockResponse);
 
         // Act
         final result = await sessionService.create(request);
@@ -135,54 +149,70 @@ void main() {
         expect(result.id, equals('new-session'));
         expect(result.name, equals('New Session'));
         expect(result.status, equals('active'));
-        expect(result.createdAt, equals(DateTime.parse('2023-01-01T00:00:00Z')));
-        expect(result.updatedAt, equals(DateTime.parse('2023-01-01T00:00:00Z')));
+        expect(
+          result.createdAt,
+          equals(DateTime.parse('2023-01-01T00:00:00Z')),
+        );
+        expect(
+          result.updatedAt,
+          equals(DateTime.parse('2023-01-01T00:00:00Z')),
+        );
 
-        verify(() => mockHttpClient.post(
-              Uri.parse('https://api.devin.ai/api/sessions'),
-              headers: any(named: 'headers'),
-              body: any(named: 'body'),
-            )).called(1);
+        verify(
+          () => mockHttpClient.post(
+            Uri.parse('https://api.devin.ai/api/sessions'),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).called(1);
       });
     });
 
     group('delete', () {
       test('deletes a session by ID', () async {
         // Arrange
-        when(() => mockHttpClient.delete(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1'),
-              headers: any(named: 'headers'),
-            )).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.delete(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1'),
+            headers: any(named: 'headers'),
+          ),
+        ).thenAnswer((_) async => mockResponse);
 
         // Act
         await sessionService.delete('session-1');
 
         // Assert
-        verify(() => mockHttpClient.delete(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1'),
-              headers: any(named: 'headers'),
-            )).called(1);
+        verify(
+          () => mockHttpClient.delete(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1'),
+            headers: any(named: 'headers'),
+          ),
+        ).called(1);
       });
     });
 
     group('sendMessage', () {
       test('sends a message to a session', () async {
         // Arrange
-        when(() => mockHttpClient.post(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1/messages'),
-              headers: any(named: 'headers'),
-              body: any(named: 'body'),
-            )).thenAnswer((_) async => mockResponse);
+        when(
+          () => mockHttpClient.post(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1/messages'),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).thenAnswer((_) async => mockResponse);
 
         // Act
         await sessionService.sendMessage('session-1', 'Hello, Devin!');
 
         // Assert
-        verify(() => mockHttpClient.post(
-              Uri.parse('https://api.devin.ai/api/sessions/session-1/messages'),
-              headers: any(named: 'headers'),
-              body: any(named: 'body'),
-            )).called(1);
+        verify(
+          () => mockHttpClient.post(
+            Uri.parse('https://api.devin.ai/api/sessions/session-1/messages'),
+            headers: any(named: 'headers'),
+            body: any(named: 'body'),
+          ),
+        ).called(1);
       });
     });
   });
