@@ -8,19 +8,6 @@ reviews:
   high_level_summary: true
   review_status: true
   collapse_walkthrough: false
-  
-  files:
-    include:
-      - "packages/flutter_whisper_kit/**/*.dart"
-      - "packages/flutter_whisper_kit_apple/**/*.dart"
-      - "packages/flutter_whisper_kit_apple/**/*.swift"
-    exclude:
-      - "**/.dart_tool/**"
-      - "**/.flutter-plugins"
-      - "**/.flutter-plugins-dependencies"
-      - "**/.fvm/**"
-      - "**/build/**"
-      - "**/*.g.dart"  # Generated files
 
 auto_review:
   enabled: true
