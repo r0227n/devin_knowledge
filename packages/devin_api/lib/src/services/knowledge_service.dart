@@ -7,29 +7,26 @@ import '../models/pagination/pagination.dart';
 /// This interface defines methods common to all API services
 sealed class KnowledgeBaseService<T, C> {
   /// Lists all items with pagination
-  /// 
+  ///
   /// Parameters:
   ///   page: The page number (1-indexed)
   ///   limit: The number of items per page
-  Future<PaginatedResponse<T>> list({
-    int? page,
-    int? limit,
-  });
-  
+  Future<PaginatedResponse<T>> list({int? page, int? limit});
+
   /// Gets an item by ID
-  /// 
+  ///
   /// Parameters:
   ///   id: The ID of the item to get
   Future<T?> get(String id);
-  
+
   /// Creates a new item
-  /// 
+  ///
   /// Parameters:
   ///   request: The request data for creating the item
   Future<T> create(C request);
-  
+
   /// Deletes an item by ID
-  /// 
+  ///
   /// Parameters:
   ///   id: The ID of the item to delete
   Future<void> delete(String id);
@@ -37,14 +34,12 @@ sealed class KnowledgeBaseService<T, C> {
 
 /// Abstract interface for interacting with the Knowledge API
 /// API Documentation: https://docs.devin.ai/api-reference/knowledge
-sealed class KnowledgeServiceBase extends KnowledgeBaseService<Knowledge, CreateKnowledgeRequest> {
+sealed class KnowledgeServiceBase
+    extends KnowledgeBaseService<Knowledge, CreateKnowledgeRequest> {
   @override
   /// Lists all knowledge items
   /// Endpoint: GET /api/knowledge
-  Future<PaginatedResponse<Knowledge>> list({
-    int? page,
-    int? limit,
-  });
+  Future<PaginatedResponse<Knowledge>> list({int? page, int? limit});
 
   @override
   /// Gets a knowledge item by ID
@@ -63,30 +58,23 @@ sealed class KnowledgeServiceBase extends KnowledgeBaseService<Knowledge, Create
 
   /// Updates a knowledge item
   /// Endpoint: PUT /api/knowledge/{id}
-  Future<Knowledge> update(
-    String id,
-    CreateKnowledgeRequest request,
-  );
+  Future<Knowledge> update(String id, CreateKnowledgeRequest request);
 }
 
 /// Implementation of [KnowledgeServiceBase]
 /// API Documentation: https://docs.devin.ai/api-reference/knowledge
 class KnowledgeService implements KnowledgeServiceBase {
+  /// Creates a new [KnowledgeService]
+  const KnowledgeService({required DevinApiClient apiClient})
+    : _apiClient = apiClient;
+
   /// The API client
   final DevinApiClient _apiClient;
-
-  /// Creates a new [KnowledgeService]
-  KnowledgeService({
-    required DevinApiClient apiClient,
-  }) : _apiClient = apiClient;
 
   @override
   /// Lists all knowledge items
   /// Endpoint: GET /api/knowledge
-  Future<PaginatedResponse<Knowledge>> list({
-    int? page,
-    int? limit,
-  }) async {
+  Future<PaginatedResponse<Knowledge>> list({int? page, int? limit}) async {
     final response = await _apiClient.get(
       DevinApiConstants.knowledge,
       queryParameters: {
@@ -123,10 +111,7 @@ class KnowledgeService implements KnowledgeServiceBase {
   @override
   /// Updates a knowledge item
   /// Endpoint: PUT /api/knowledge/{id}
-  Future<Knowledge> update(
-    String id,
-    CreateKnowledgeRequest request,
-  ) async {
+  Future<Knowledge> update(String id, CreateKnowledgeRequest request) async {
     final response = await _apiClient.put(
       '${DevinApiConstants.knowledge}/$id',
       body: request.toJson(),
