@@ -1,21 +1,17 @@
 /// A secret
 class Secret {
+  /// Creates a new [Secret]
+  const Secret({required this.id, required this.name, required this.createdAt});
+
   /// The ID of the secret
   final String id;
-  
+
   /// The name of the secret
   final String name;
-  
+
   /// The timestamp when the secret was created
   final DateTime createdAt;
-  
-  /// Creates a new [Secret]
-  Secret({
-    required this.id,
-    required this.name,
-    required this.createdAt,
-  });
-  
+
   /// Creates a [Secret] from JSON
   factory Secret.fromJson(Map<String, dynamic> json) {
     return Secret(
@@ -24,13 +20,9 @@ class Secret {
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
-  
+
   /// Converts this [Secret] to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'created_at': createdAt.toIso8601String(),
-    };
+    return {'id': id, 'name': name, 'created_at': createdAt.toIso8601String()};
   }
 }

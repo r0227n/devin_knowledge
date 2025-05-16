@@ -1,29 +1,29 @@
 /// A knowledge item
 class Knowledge {
-  /// The ID of the knowledge item
-  final String id;
-  
-  /// The title of the knowledge item
-  final String title;
-  
-  /// The content of the knowledge item
-  final String content;
-  
-  /// The timestamp when the knowledge item was created
-  final DateTime createdAt;
-  
-  /// The timestamp when the knowledge item was last updated
-  final DateTime updatedAt;
-  
   /// Creates a new [Knowledge]
-  Knowledge({
+  const Knowledge({
     required this.id,
     required this.title,
     required this.content,
     required this.createdAt,
     required this.updatedAt,
   });
-  
+
+  /// The ID of the knowledge item
+  final String id;
+
+  /// The title of the knowledge item
+  final String title;
+
+  /// The content of the knowledge item
+  final String content;
+
+  /// The timestamp when the knowledge item was created
+  final DateTime createdAt;
+
+  /// The timestamp when the knowledge item was last updated
+  final DateTime updatedAt;
+
   /// Creates a [Knowledge] from JSON
   factory Knowledge.fromJson(Map<String, dynamic> json) {
     return Knowledge(
@@ -34,7 +34,7 @@ class Knowledge {
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
   }
-  
+
   /// Converts this [Knowledge] to JSON
   Map<String, dynamic> toJson() {
     return {
@@ -49,18 +49,15 @@ class Knowledge {
 
 /// Request to create a new knowledge item
 class CreateKnowledgeRequest {
+  /// Creates a new [CreateKnowledgeRequest]
+  const CreateKnowledgeRequest({required this.title, required this.content});
+
   /// The title of the knowledge item
   final String title;
-  
+
   /// The content of the knowledge item
   final String content;
-  
-  /// Creates a new [CreateKnowledgeRequest]
-  CreateKnowledgeRequest({
-    required this.title,
-    required this.content,
-  });
-  
+
   /// Creates a [CreateKnowledgeRequest] from JSON
   factory CreateKnowledgeRequest.fromJson(Map<String, dynamic> json) {
     return CreateKnowledgeRequest(
@@ -68,12 +65,9 @@ class CreateKnowledgeRequest {
       content: json['content'] as String,
     );
   }
-  
+
   /// Converts this [CreateKnowledgeRequest] to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'content': content,
-    };
+    return {'title': title, 'content': content};
   }
 }
