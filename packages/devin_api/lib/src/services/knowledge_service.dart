@@ -52,7 +52,6 @@ class KnowledgeService
     return Knowledge.fromJson(response);
   }
 
-  @override
   /// Updates a knowledge item
   /// Endpoint: PUT /api/knowledge/{id}
   Future<Knowledge> update(String id, CreateKnowledgeRequest request) async {
