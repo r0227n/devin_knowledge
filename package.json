@@ -1,13 +1,21 @@
 {
-    "name": "flutter_template_project",
+    "name": "devin_knowledge",
     "version": "1.0.0",
-    "description": "Flutter template project with commit linting",
-    "private": true,
-    "scripts": {
-        "commitlint": "commitlint --edit"
+    "description": "Devin Knowledge",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs"
     },
+    "scripts": {
+        "test": "echo \"No tests specified\"",
+        "prepare": "husky"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
     "devDependencies": {
-        "@commitlint/cli": "^18.0.0",
-        "@commitlint/config-conventional": "^18.0.0"
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "husky": "^9.1.7"
     }
 }
