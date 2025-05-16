@@ -22,7 +22,6 @@ class DevinApiClient {
   }
 
   /// Makes a GET request to the specified [endpoint]
-  @protected
   Future<Map<String, dynamic>> get(
     String endpoint, {
     Map<String, String>? queryParameters,
@@ -37,7 +36,6 @@ class DevinApiClient {
   }
 
   /// Makes a POST request to the specified [endpoint] with the given [body]
-  @protected
   Future<Map<String, dynamic>> post(
     String endpoint, {
     Map<String, dynamic>? body,
@@ -71,7 +69,6 @@ class DevinApiClient {
   }
 
   /// Makes a DELETE request to the specified [endpoint]
-  @protected
   Future<Map<String, dynamic>> delete(String endpoint) async {
     final uri = Uri.parse('${DevinApiConstants.baseUrl}$endpoint');
 

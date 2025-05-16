@@ -17,22 +17,22 @@ class DevinClient {
   final DevinApiClient _apiClient;
 
   /// The session service
-  late final SessionServiceBase _sessionService;
+  late final SessionService _sessionService;
 
   /// The knowledge service
-  late final KnowledgeServiceBase _knowledgeService;
+  late final KnowledgeService _knowledgeService;
 
   /// The secret service
-  late final SecretServiceBase _secretService;
+  late final SecretService _secretService;
 
   /// Gets the session service
-  SessionServiceBase get sessions => _sessionService;
+  SessionService get sessions => _sessionService;
 
   /// Gets the knowledge service
-  KnowledgeServiceBase get knowledge => _knowledgeService;
+  KnowledgeService get knowledge => _knowledgeService;
 
   /// Gets the secret service
-  SecretServiceBase get secrets => _secretService;
+  SecretService get secrets => _secretService;
 
   /// Closes the client
   void close() {
