@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 import 'api_constants.dart';
 import 'api_exception.dart';
 
@@ -52,7 +51,6 @@ class DevinApiClient {
   }
 
   /// Makes a PUT request to the specified [endpoint] with the given [body]
-  @protected
   Future<Map<String, dynamic>> put(
     String endpoint, {
     Map<String, dynamic>? body,

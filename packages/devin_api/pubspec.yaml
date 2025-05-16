@@ -13,7 +13,6 @@ environment:
 # Add regular dependencies here.
 dependencies:
   http: ^1.2.0
-  meta: ^1.16.0
 
 dev_dependencies:
   lints: ^5.0.0
