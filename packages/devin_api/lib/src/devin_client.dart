@@ -1,5 +1,7 @@
 import 'core/api_client.dart';
-import 'services/services.dart';
+import 'services/session_service.dart';
+import 'services/knowledge_service.dart';
+import 'services/secret_service.dart';
 
 /// The main client for the Devin API
 class DevinClient {
