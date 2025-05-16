@@ -5,7 +5,9 @@ library;
 
 // Core
 export 'src/devin_client.dart';
+export 'src/core/api_client.dart';
 export 'src/core/api_exception.dart';
+export 'src/core/api_constants.dart';
 
 // Models
 export 'src/models/session/session.dart';
