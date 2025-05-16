@@ -1,8 +1,8 @@
 import 'base_service.dart';
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
-import '../models/secret/secret.dart';
-import '../models/pagination/pagination.dart';
+import '../models/secret.dart';
+import '../models/pagination.dart';
 
 /// Secret Endpoints
 /// API Documentation: https://docs.devin.ai/api-reference/overview#secrets
