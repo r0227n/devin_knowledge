@@ -1,8 +1,8 @@
 import 'base_service.dart';
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
-import '../models/session/session.dart';
-import '../models/pagination/pagination.dart';
+import '../models/session.dart';
+import '../models/pagination.dart';
 
 /// Abstract interface for interacting with the Sessions API
 /// API Documentation: https://docs.devin.ai/api-reference/overview#sessions

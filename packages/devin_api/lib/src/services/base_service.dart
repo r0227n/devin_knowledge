@@ -1,4 +1,4 @@
-import '../models/pagination/pagination.dart';
+import '../models/pagination.dart';
 
 sealed class DevinService<T, C> {}
 

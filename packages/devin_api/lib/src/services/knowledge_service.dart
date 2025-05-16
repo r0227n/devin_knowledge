@@ -1,8 +1,8 @@
 import 'base_service.dart';
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
-import '../models/knowledge/knowledge.dart';
-import '../models/pagination/pagination.dart';
+import '../models/knowledge.dart';
+import '../models/pagination.dart';
 
 /// Knowledge Endpoints
 /// API Documentation: https://docs.devin.ai/api-reference/overview#knowledge
