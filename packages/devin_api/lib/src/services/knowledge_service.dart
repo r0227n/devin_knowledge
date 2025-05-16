@@ -1,69 +1,13 @@
+import 'base_service.dart';
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
 import '../models/knowledge/knowledge.dart';
 import '../models/pagination/pagination.dart';
 
-/// Base service interface for common API operations
-/// This interface defines methods common to all API services
-sealed class KnowledgeBaseService<T, C> {
-  /// Lists all items with pagination
-  ///
-  /// Parameters:
-  ///   page: The page number (1-indexed)
-  ///   limit: The number of items per page
-  Future<PaginatedResponse<T>> list({int? page, int? limit});
-
-  /// Gets an item by ID
-  ///
-  /// Parameters:
-  ///   id: The ID of the item to get
-  Future<T?> get(String id);
-
-  /// Creates a new item
-  ///
-  /// Parameters:
-  ///   request: The request data for creating the item
-  Future<T> create(C request);
-
-  /// Deletes an item by ID
-  ///
-  /// Parameters:
-  ///   id: The ID of the item to delete
-  Future<void> delete(String id);
-}
-
-/// Abstract interface for interacting with the Knowledge API
-/// API Documentation: https://docs.devin.ai/api-reference/knowledge
-sealed class KnowledgeServiceBase
-    extends KnowledgeBaseService<Knowledge, CreateKnowledgeRequest> {
-  @override
-  /// Lists all knowledge items
-  /// Endpoint: GET /api/knowledge
-  Future<PaginatedResponse<Knowledge>> list({int? page, int? limit});
-
-  @override
-  /// Gets a knowledge item by ID
-  /// Endpoint: GET /api/knowledge/{id}
-  Future<Knowledge> get(String id);
-
-  @override
-  /// Creates a new knowledge item
-  /// Endpoint: POST /api/knowledge
-  Future<Knowledge> create(CreateKnowledgeRequest request);
-
-  @override
-  /// Deletes a knowledge item by ID
-  /// Endpoint: DELETE /api/knowledge/{id}
-  Future<void> delete(String id);
-
-  /// Updates a knowledge item
-  /// Endpoint: PUT /api/knowledge/{id}
-  Future<Knowledge> update(String id, CreateKnowledgeRequest request);
-}
-
-/// Implementation of [KnowledgeServiceBase]
-/// API Documentation: https://docs.devin.ai/api-reference/knowledge
-class KnowledgeService implements KnowledgeServiceBase {
+/// Knowledge Endpoints
+/// API Documentation: https://docs.devin.ai/api-reference/overview#knowledge
+class KnowledgeService
+    implements BaseService<Knowledge, CreateKnowledgeRequest> {
   /// Creates a new [KnowledgeService]
   const KnowledgeService({required DevinApiClient apiClient})
     : _apiClient = apiClient;

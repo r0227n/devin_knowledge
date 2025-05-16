@@ -1,41 +1,13 @@
+import 'base_service.dart';
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
 import '../models/session/session.dart';
 import '../models/pagination/pagination.dart';
 
-/// Base service interface for common API operations
-/// This interface defines methods common to all API services
-sealed class SessionBaseService<T, C> {
-  /// Lists all items with pagination
-  ///
-  /// Parameters:
-  ///   page: The page number (1-indexed)
-  ///   limit: The number of items per page
-  Future<PaginatedResponse<T>> list({int? page, int? limit});
-
-  /// Gets an item by ID
-  ///
-  /// Parameters:
-  ///   id: The ID of the item to get
-  Future<T?> get(String id);
-
-  /// Creates a new item
-  ///
-  /// Parameters:
-  ///   request: The request data for creating the item
-  Future<T> create(C request);
-
-  /// Deletes an item by ID
-  ///
-  /// Parameters:
-  ///   id: The ID of the item to delete
-  Future<void> delete(String id);
-}
-
 /// Abstract interface for interacting with the Sessions API
-/// API Documentation: https://docs.devin.ai/api-reference/sessions
+/// API Documentation: https://docs.devin.ai/api-reference/overview#sessions
 sealed class SessionServiceBase
-    extends SessionBaseService<Session, CreateSessionRequest> {
+    extends BaseService<Session, CreateSessionRequest> {
   @override
   /// Lists all sessions
   /// Endpoint: GET /api/sessions
@@ -61,8 +33,8 @@ sealed class SessionServiceBase
   Future<void> sendMessage(String sessionId, String message);
 }
 
-/// Implementation of [SessionServiceBase]
-/// API Documentation: https://docs.devin.ai/api-reference/sessions
+/// Session Endpoints
+/// API Documentation: https://docs.devin.ai/api-reference/overview#sessions
 class SessionService implements SessionServiceBase {
   /// Creates a new [SessionService]
   const SessionService({required DevinApiClient apiClient})
