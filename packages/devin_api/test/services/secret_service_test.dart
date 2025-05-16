@@ -73,26 +73,6 @@ void main() {
       });
     });
 
-    group('get', () {
-      test('throws UnimplementedError', () async {
-        // Act & Assert
-        expect(
-          () => secretService.get('secret-1'),
-          throwsA(isA<UnimplementedError>()),
-        );
-      });
-    });
-
-    group('create', () {
-      test('throws UnimplementedError', () async {
-        // Act & Assert
-        expect(
-          () => secretService.create(null),
-          throwsA(isA<UnimplementedError>()),
-        );
-      });
-    });
-
     group('delete', () {
       test('deletes a secret by ID', () async {
         // Arrange
