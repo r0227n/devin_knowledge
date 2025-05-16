@@ -1,5 +1,4 @@
 import 'package:devin_api/devin_api.dart';
-import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 

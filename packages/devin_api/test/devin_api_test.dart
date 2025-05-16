@@ -1,26 +1,8 @@
-import 'dart:convert';
 import 'package:devin_api/devin_api.dart';
-import 'package:http/http.dart' as http;
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-
-class MockHttpClient extends Mock implements http.Client {}
-
-class MockResponse extends Mock implements http.Response {}
 
 void main() {
   group('DevinClient', () {
-    late MockHttpClient mockHttpClient;
-    late http.Response mockResponse;
-
-    setUp(() {
-      mockHttpClient = MockHttpClient();
-      mockResponse = MockResponse();
-
-      when(() => mockResponse.statusCode).thenReturn(200);
-      when(() => mockResponse.body).thenReturn('{}');
-    });
-
     test(
       'Session service - listSessions returns a paginated list of sessions',
       () async {
