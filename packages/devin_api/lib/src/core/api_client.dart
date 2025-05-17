@@ -40,7 +40,7 @@ class DevinApiClient {
     Map<String, String>? additionalHeaders,
     Map<String, dynamic>? body,
   }) async {
-    final uri = Uri.parse('${DevinApiConstants.baseUrl}$endpoint');
+    final uri = Uri.parse('${DevinApiConstants.baseUrl}/$endpoint');
 
     final response = await _httpClient.post(
       uri,
@@ -56,7 +56,7 @@ class DevinApiClient {
     String endpoint, {
     Map<String, dynamic>? body,
   }) async {
-    final uri = Uri.parse('${DevinApiConstants.baseUrl}$endpoint');
+    final uri = Uri.parse('${DevinApiConstants.baseUrl}/$endpoint');
 
     final response = await _httpClient.put(
       uri,
