@@ -22,8 +22,9 @@ void main() async {
     // Create a new knowledge item
     final newKnowledge = await client.knowledge.create(
       CreateKnowledgeRequest(
-        title: 'Test Knowledge',
-        content: 'This is a test knowledge item',
+        name: 'Test Knowledge',
+        body: 'This is a test knowledge item',
+        triggerDescription: 'Triggered by example script',
       ),
     );
     print('Created knowledge item: ${newKnowledge.id}');
