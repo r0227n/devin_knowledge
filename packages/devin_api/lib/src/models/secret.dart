@@ -1,28 +1,61 @@
-/// A secret
+/// Type of secret
+enum SecretType {
+  cookie('cookie'),
+  keyValue('key-value'),
+  dictionary('dictionary'),
+  totp('totp');
+
+  const SecretType(this.key);
+
+  final String key;
+
+  factory SecretType.fromString(String value) {
+    for (final type in SecretType.values) {
+      if (type.key == value) {
+        return type;
+      }
+    }
+
+    throw ArgumentError('Invalid secret type: $value');
+  }
+}
+
+/// Secret Devin API Model
 class Secret {
-  /// Creates a new [Secret]
-  const Secret({required this.id, required this.name, required this.createdAt});
+  const Secret({
+    required this.secretId,
+    required this.secretType,
+    required this.secretName,
+    required this.createdAt,
+  });
 
-  /// The ID of the secret
-  final String id;
+  /// Unique identifier for the secret
+  final String secretId;
 
-  /// The name of the secret
-  final String name;
+  /// Type of secret
+  final SecretType secretType;
 
-  /// The timestamp when the secret was created
+  /// User-defined name for the secret
+  final String secretName;
+
+  /// Creation timestamp (ISO 8601)
   final DateTime createdAt;
 
-  /// Creates a [Secret] from JSON
-  factory Secret.fromJson(Map<String, dynamic> json) {
+  factory Secret.fromJson(Map<String, dynamic> data) {
     return Secret(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      secretId: data['secret_id'] as String,
+      secretType: SecretType.fromString(data['secret_type'] as String),
+      secretName: data['secret_name'] as String,
+      createdAt: DateTime.parse(data['created_at'] as String),
     );
   }
 
-  /// Converts this [Secret] to JSON
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'created_at': createdAt.toIso8601String()};
+    return {
+      'secret_id': secretId,
+      'secret_type': secretType.key,
+      'secret_name': secretName,
+      'created_at': createdAt.toIso8601String(),
+    };
   }
 }
