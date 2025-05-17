@@ -23,38 +23,38 @@ enum SecretType {
 /// Secret Devin API Model
 class Secret {
   const Secret({
-    required this.secretId,
-    required this.secretType,
-    required this.secretName,
+    required this.id,
+    required this.type,
+    required this.key,
     required this.createdAt,
   });
 
   /// Unique identifier for the secret
-  final String secretId;
+  final String id;
 
   /// Type of secret
-  final SecretType secretType;
+  final SecretType type;
 
   /// User-defined name for the secret
-  final String secretName;
+  final String key;
 
   /// Creation timestamp (ISO 8601)
   final DateTime createdAt;
 
   factory Secret.fromJson(Map<String, dynamic> data) {
     return Secret(
-      secretId: data['secret_id'] as String,
-      secretType: SecretType.fromString(data['secret_type'] as String),
-      secretName: data['secret_name'] as String,
+      id: data['id'] as String,
+      type: SecretType.fromString(data['type'] as String),
+      key: data['key'] as String,
       createdAt: DateTime.parse(data['created_at'] as String),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'secret_id': secretId,
-      'secret_type': secretType.key,
-      'secret_name': secretName,
+      'secret_id': id,
+      'type': type.key,
+      'key': key,
       'created_at': createdAt.toIso8601String(),
     };
   }
