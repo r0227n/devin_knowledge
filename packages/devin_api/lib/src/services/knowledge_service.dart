@@ -39,20 +39,20 @@ class KnowledgeService implements KnowledgeServiceBase {
   }
 
   @override
-  Future<Knowledge> create(CreateKnowledgeRequest data) async {
+  Future<Knowledge> create(CreateKnowledgeRequest request) async {
     final response = await _apiClient.post(
       DevinApiConstants.knowledge,
-      body: data.toJson(),
+      body: request.toJson(),
     );
 
     return Knowledge.fromJson(response);
   }
 
   @override
-  Future<Knowledge> update(String id, CreateKnowledgeRequest data) async {
+  Future<Knowledge> update(String id, CreateKnowledgeRequest request) async {
     final response = await _apiClient.put(
       '${DevinApiConstants.knowledge}/$id',
-      body: data.toJson(),
+      body: request.toJson(),
     );
 
     return Knowledge.fromJson(response);

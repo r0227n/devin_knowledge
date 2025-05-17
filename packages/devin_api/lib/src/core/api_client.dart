@@ -69,7 +69,7 @@ class DevinApiClient {
 
   /// Makes a DELETE request to the specified [endpoint]
   Future<Map<String, dynamic>> delete(String endpoint) async {
-    final uri = Uri.parse('${DevinApiConstants.baseUrl}$endpoint');
+    final uri = Uri.parse('${DevinApiConstants.baseUrl}/$endpoint');
 
     final response = await _httpClient.delete(uri, headers: _createHeaders());
 
