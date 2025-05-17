@@ -19,10 +19,4 @@ class DevinApiConstants {
   static const String knowledge = '$_apiVersion/knowledge';
 
   static const String enterprise = '$_apiVersion/enterprise';
-
-  /// Error messages
-  static const String invalidApiKey = 'Invalid API key provided';
-  static const String networkError = 'Network error occurred';
-  static const String serverError = 'Server error occurred';
-  static const String unknownError = 'Unknown error occurred';
 }

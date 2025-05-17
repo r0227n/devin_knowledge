@@ -118,7 +118,7 @@ class DevinApiClient {
       case 400:
         return 'Bad request';
       case 401:
-        return DevinApiConstants.invalidApiKey;
+        return 'Invalid API key provided';
       case 403:
         return 'Forbidden';
       case 404:
@@ -129,9 +129,9 @@ class DevinApiClient {
       case 502:
       case 503:
       case 504:
-        return DevinApiConstants.serverError;
+        return 'Server error occurred';
       default:
-        return DevinApiConstants.unknownError;
+        return 'Unknown error occurred';
     }
   }
 }
