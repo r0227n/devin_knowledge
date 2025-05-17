@@ -55,11 +55,11 @@ class SessionService implements SessionServiceBase {
   }) async {
     final List<String> validatedArgs = [];
 
-    if (1 <= limit && limit <= 1000) {
-      validatedArgs.add('Limit must be between 1 and 100');
+    if (limit < 1 || limit > 1000) {
+      validatedArgs.add('Limit must be between 1 and 1000');
     }
 
-    if (offset >= 0) {
+    if (offset < 0) {
       validatedArgs.add('Offset must be greater than 0');
     }
 
@@ -73,7 +73,7 @@ class SessionService implements SessionServiceBase {
       queryParameters: {
         'limit': limit.toString(),
         'offset': offset.toString(),
-        'tags': tags.join(','),
+        if (tags.isNotEmpty) 'tags': tags.join(','),
       },
     );
 
