@@ -139,7 +139,6 @@ class KnowledgeResponse {
   final List<Folder> folders;
 
   factory KnowledgeResponse.fromJson(Map<String, dynamic> json) {
-    print(json.keys);
     return KnowledgeResponse(
       knowledge:
           (json['knowledge'] as List<dynamic>? ?? const <dynamic>[])
