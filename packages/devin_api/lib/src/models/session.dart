@@ -200,31 +200,69 @@ class Session {
 /// Request to create a new session
 class CreateSessionRequest {
   const CreateSessionRequest({
-    this.limit = 100,
-    this.offset = 0,
-    this.tags = const [],
+    required this.prompt,
+    this.snapshotId,
+    this.unlisted,
+    this.idempotent,
+    this.maxAcuLimit,
+    this.secretIds,
+    this.knowledgeIds,
+    this.tags,
+    this.title,
   });
 
-  /// Maximum number of sessions to return per page
-  final int limit;
+  /// The task description for Devin
+  final String prompt;
 
-  /// Number of sessions to skip for pagination
-  final int offset;
+  /// ID of a machine snapshot to use
+  final String? snapshotId;
 
-  /// Filter sessions by tags
-  final List<String> tags;
+  /// Whether the session should be unlisted
+  final bool? unlisted;
 
-  /// Creates a [CreateSessionRequest] from JSON
+  /// Enable idempotent session creation
+  final bool? idempotent;
+
+  /// Maximum ACU limit for the session
+  final int? maxAcuLimit;
+
+  /// List of secret IDs to use. If None, use all secrets. If empty list, use no secrets.
+  final List<String>? secretIds;
+
+  /// List of knowledge IDs to use. If None, use all knowledge. If empty list, use no knowledge.
+  final List<String>? knowledgeIds;
+
+  /// List of tags to add to the session.
+  final List<String>? tags;
+
+  /// Custom title for the session. If None, a title will be generated automatically.
+  final String? title;
+
   factory CreateSessionRequest.fromJson(Map<String, dynamic> json) {
     return CreateSessionRequest(
-      limit: json['limit'] as int,
-      offset: json['offset'] as int,
-      tags: json['tags'] as List<String>,
+      prompt: json['prompt'] as String,
+      snapshotId: json['snapshot_id'] as String?,
+      unlisted: json['unlisted'] as bool?,
+      idempotent: json['idempotent'] as bool?,
+      maxAcuLimit: json['max_acu_limit'] as int?,
+      secretIds: json['secret_ids'] as List<String>?,
+      knowledgeIds: json['knowledge_ids'] as List<String>?,
+      tags: json['tags'] as List<String>?,
+      title: json['title'] as String?,
     );
   }
 
-  /// Converts this [CreateSessionRequest] to JSON
   Map<String, dynamic> toJson() {
-    return {'limit': limit, 'offset': offset, 'tags': tags};
+    return {
+      'prompt': prompt,
+      'snapshot_id': snapshotId,
+      'unlisted': unlisted,
+      'idempotent': idempotent,
+      'max_acu_limit': maxAcuLimit,
+      'secret_ids': secretIds,
+      'knowledge_ids': knowledgeIds,
+      'tags': tags,
+      'title': title,
+    };
   }
 }
