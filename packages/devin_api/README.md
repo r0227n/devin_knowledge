@@ -67,7 +67,7 @@ final sessions = await client.sessions.list();
 
 // Get a session by ID
 // GET /api/sessions/{id}
-final session = await client.sessions.get('session-id');
+final session = await client.sessions.retrieve('session-id');
 
 // Create a new session
 // POST /api/sessions
