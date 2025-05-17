@@ -5,6 +5,10 @@ import 'package:test/test.dart';
 import '../test_helpers/mock_client.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValues();
+  });
+  
   group('SecretService', () {
     late MockHttpClient mockHttpClient;
     late MockResponse mockResponse;
@@ -22,50 +26,50 @@ void main() {
 
       when(() => mockResponse.statusCode).thenReturn(200);
       when(() => mockResponse.body).thenReturn('{}');
+      
+      // Setup mock HTTP client to return a response
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => mockResponse);
+      when(() => mockHttpClient.delete(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => mockResponse);
     });
 
     group('list', () {
-      test('returns a paginated list of secrets', () async {
+      test('returns a list of secrets', () async {
         // Arrange
         final responseJson = {
-          'items': [
+          'secrets': [
             {
               'id': 'secret-1',
-              'name': 'Test Secret 1',
+              'key': 'Test Secret 1',
+              'type': 'key-value',
               'created_at': '2023-01-01T00:00:00Z',
             },
             {
               'id': 'secret-2',
-              'name': 'Test Secret 2',
+              'key': 'Test Secret 2',
+              'type': 'cookie',
               'created_at': '2023-01-03T00:00:00Z',
             },
           ],
-          'page_info': {'total': 2, 'limit': 10, 'page': 1, 'has_more': false},
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(
-          () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/secrets?page=1&limit=10'),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
 
         // Act
-        final result = await secretService.list(page: 1, limit: 10);
+        final result = await secretService.list();
 
         // Assert
         expect(result.items.length, equals(2));
         expect(result.items[0].id, equals('secret-1'));
+        expect(result.items[0].key, equals('Test Secret 1'));
+        expect(result.items[0].type, equals(SecretType.keyValue));
         expect(result.items[1].id, equals('secret-2'));
-        expect(result.pageInfo.total, equals(2));
-        expect(result.pageInfo.limit, equals(10));
-        expect(result.pageInfo.page, equals(1));
-        expect(result.pageInfo.hasMore, equals(false));
+        expect(result.items[1].type, equals(SecretType.cookie));
 
         verify(
           () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/secrets?page=1&limit=10'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}'),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -74,21 +78,13 @@ void main() {
 
     group('delete', () {
       test('deletes a secret by ID', () async {
-        // Arrange
-        when(
-          () => mockHttpClient.delete(
-            Uri.parse('https://api.devin.ai/api/secrets/secret-1'),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
-
         // Act
         await secretService.delete('secret-1');
 
         // Assert
         verify(
           () => mockHttpClient.delete(
-            Uri.parse('https://api.devin.ai/api/secrets/secret-1'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}/secret-1'),
             headers: any(named: 'headers'),
           ),
         ).called(1);

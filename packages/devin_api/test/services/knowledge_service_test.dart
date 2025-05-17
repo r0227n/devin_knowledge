@@ -5,6 +5,10 @@ import 'package:test/test.dart';
 import '../test_helpers/mock_client.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValues();
+  });
+  
   group('KnowledgeService', () {
     late MockHttpClient mockHttpClient;
     late MockResponse mockResponse;
@@ -22,98 +26,68 @@ void main() {
 
       when(() => mockResponse.statusCode).thenReturn(200);
       when(() => mockResponse.body).thenReturn('{}');
+      
+      // Setup mock HTTP client to return a response
+      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => mockResponse);
+      when(() => mockHttpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
+          .thenAnswer((_) async => mockResponse);
+      when(() => mockHttpClient.put(any(), headers: any(named: 'headers'), body: any(named: 'body')))
+          .thenAnswer((_) async => mockResponse);
+      when(() => mockHttpClient.delete(any(), headers: any(named: 'headers')))
+          .thenAnswer((_) async => mockResponse);
     });
 
     group('list', () {
-      test('returns a paginated list of knowledge items', () async {
+      test('returns a list of knowledge items', () async {
         // Arrange
         final responseJson = {
-          'items': [
+          'knowledge': [
             {
               'id': 'knowledge-1',
-              'title': 'Test Knowledge 1',
-              'content': 'Test Content 1',
+              'name': 'Test Knowledge 1',
+              'body': 'Test Content 1',
+              'trigger_description': 'When testing',
+              'parent_folder_id': 'folder-1',
               'created_at': '2023-01-01T00:00:00Z',
-              'updated_at': '2023-01-02T00:00:00Z',
             },
             {
               'id': 'knowledge-2',
-              'title': 'Test Knowledge 2',
-              'content': 'Test Content 2',
+              'name': 'Test Knowledge 2',
+              'body': 'Test Content 2',
+              'trigger_description': 'When testing',
+              'parent_folder_id': 'folder-1',
               'created_at': '2023-01-03T00:00:00Z',
-              'updated_at': '2023-01-04T00:00:00Z',
             },
           ],
-          'page_info': {'total': 2, 'limit': 10, 'page': 1, 'has_more': false},
+          'folders': [
+            {
+              'id': 'folder-1',
+              'name': 'Test Folder',
+              'description': 'Test Folder Description',
+              'created_at': '2023-01-01T00:00:00Z',
+            }
+          ]
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(
-          () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/knowledge?page=1&limit=10'),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
 
         // Act
-        final result = await knowledgeService.list(page: 1, limit: 10);
+        final result = await knowledgeService.list();
 
         // Assert
-        expect(result.items.length, equals(2));
-        expect(result.items[0].id, equals('knowledge-1'));
-        expect(result.items[1].id, equals('knowledge-2'));
-        expect(result.pageInfo.total, equals(2));
-        expect(result.pageInfo.limit, equals(10));
-        expect(result.pageInfo.page, equals(1));
-        expect(result.pageInfo.hasMore, equals(false));
+        expect(result.items.length, equals(1));
+        expect(result.items[0].knowledge.length, equals(2));
+        expect(result.items[0].knowledge[0].id, equals('knowledge-1'));
+        expect(result.items[0].knowledge[0].name, equals('Test Knowledge 1'));
+        expect(result.items[0].knowledge[0].body, equals('Test Content 1'));
+        expect(result.items[0].knowledge[1].id, equals('knowledge-2'));
+        expect(result.items[0].folders.length, equals(1));
+        expect(result.items[0].folders[0].id, equals('folder-1'));
 
         verify(
           () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/knowledge?page=1&limit=10'),
-            headers: any(named: 'headers'),
-          ),
-        ).called(1);
-      });
-    });
-
-    group('get', () {
-      test('returns a knowledge item by ID', () async {
-        // Arrange
-        final responseJson = {
-          'id': 'knowledge-1',
-          'title': 'Test Knowledge',
-          'content': 'Test Content',
-          'created_at': '2023-01-01T00:00:00Z',
-          'updated_at': '2023-01-02T00:00:00Z',
-        };
-
-        when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(
-          () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
-
-        // Act
-        final result = await knowledgeService.get('knowledge-1');
-
-        // Assert
-        expect(result.id, equals('knowledge-1'));
-        expect(result.title, equals('Test Knowledge'));
-        expect(result.content, equals('Test Content'));
-        expect(
-          result.createdAt,
-          equals(DateTime.parse('2023-01-01T00:00:00Z')),
-        );
-        expect(
-          result.updatedAt,
-          equals(DateTime.parse('2023-01-02T00:00:00Z')),
-        );
-
-        verify(
-          () => mockHttpClient.get(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}'),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -124,45 +98,37 @@ void main() {
       test('creates a new knowledge item', () async {
         // Arrange
         final request = CreateKnowledgeRequest(
-          title: 'New Knowledge',
-          content: 'New Content',
+          name: 'New Knowledge',
+          body: 'New Content',
+          triggerDescription: 'When testing',
         );
         final responseJson = {
           'id': 'new-knowledge',
-          'title': 'New Knowledge',
-          'content': 'New Content',
+          'name': 'New Knowledge',
+          'body': 'New Content',
+          'trigger_description': 'When testing',
+          'parent_folder_id': null,
           'created_at': '2023-01-01T00:00:00Z',
-          'updated_at': '2023-01-01T00:00:00Z',
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(
-          () => mockHttpClient.post(
-            Uri.parse('https://api.devin.ai/api/knowledge'),
-            headers: any(named: 'headers'),
-            body: any(named: 'body'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
 
         // Act
         final result = await knowledgeService.create(request);
 
         // Assert
         expect(result.id, equals('new-knowledge'));
-        expect(result.title, equals('New Knowledge'));
-        expect(result.content, equals('New Content'));
+        expect(result.name, equals('New Knowledge'));
+        expect(result.body, equals('New Content'));
+        expect(result.triggerDescription, equals('When testing'));
         expect(
           result.createdAt,
-          equals(DateTime.parse('2023-01-01T00:00:00Z')),
-        );
-        expect(
-          result.updatedAt,
           equals(DateTime.parse('2023-01-01T00:00:00Z')),
         );
 
         verify(
           () => mockHttpClient.post(
-            Uri.parse('https://api.devin.ai/api/knowledge'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}'),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
@@ -174,45 +140,37 @@ void main() {
       test('updates a knowledge item', () async {
         // Arrange
         final request = CreateKnowledgeRequest(
-          title: 'Updated Knowledge',
-          content: 'Updated Content',
+          name: 'Updated Knowledge',
+          body: 'Updated Content',
+          triggerDescription: 'When testing updates',
         );
         final responseJson = {
           'id': 'knowledge-1',
-          'title': 'Updated Knowledge',
-          'content': 'Updated Content',
+          'name': 'Updated Knowledge',
+          'body': 'Updated Content',
+          'trigger_description': 'When testing updates',
+          'parent_folder_id': null,
           'created_at': '2023-01-01T00:00:00Z',
-          'updated_at': '2023-01-02T00:00:00Z',
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        when(
-          () => mockHttpClient.put(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
-            headers: any(named: 'headers'),
-            body: any(named: 'body'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
 
         // Act
         final result = await knowledgeService.update('knowledge-1', request);
 
         // Assert
         expect(result.id, equals('knowledge-1'));
-        expect(result.title, equals('Updated Knowledge'));
-        expect(result.content, equals('Updated Content'));
+        expect(result.name, equals('Updated Knowledge'));
+        expect(result.body, equals('Updated Content'));
+        expect(result.triggerDescription, equals('When testing updates'));
         expect(
           result.createdAt,
           equals(DateTime.parse('2023-01-01T00:00:00Z')),
         );
-        expect(
-          result.updatedAt,
-          equals(DateTime.parse('2023-01-02T00:00:00Z')),
-        );
 
         verify(
           () => mockHttpClient.put(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1'),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
@@ -222,21 +180,13 @@ void main() {
 
     group('delete', () {
       test('deletes a knowledge item by ID', () async {
-        // Arrange
-        when(
-          () => mockHttpClient.delete(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
-            headers: any(named: 'headers'),
-          ),
-        ).thenAnswer((_) async => mockResponse);
-
         // Act
         await knowledgeService.delete('knowledge-1');
 
         // Assert
         verify(
           () => mockHttpClient.delete(
-            Uri.parse('https://api.devin.ai/api/knowledge/knowledge-1'),
+            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1'),
             headers: any(named: 'headers'),
           ),
         ).called(1);
