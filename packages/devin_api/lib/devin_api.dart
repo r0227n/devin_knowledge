@@ -13,7 +13,7 @@ export 'src/core/api_constants.dart';
 export 'src/models/session.dart';
 export 'src/models/knowledge.dart';
 export 'src/models/secret.dart';
-export 'src/models/pagination.dart';
+export 'src/models/list_response.dart';
 
 // Service interfaces
 export 'src/services/session_service.dart';
