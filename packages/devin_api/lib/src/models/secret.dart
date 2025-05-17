@@ -52,7 +52,7 @@ class Secret {
 
   Map<String, dynamic> toJson() {
     return {
-      'secret_id': id,
+      'id': id,
       'type': type.key,
       'key': key,
       'created_at': createdAt.toIso8601String(),
