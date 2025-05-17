@@ -19,9 +19,15 @@ class ListResponse<T> {
           )
           as ListResponse<T>;
     } else if (T == Secret) {
+      final secrets = json['secrets'] as List<dynamic>?;
+
+      if (secrets == null) {
+        return ListResponse<Secret>(items: const []) as ListResponse<T>;
+      }
+
       return ListResponse<Secret>(
             items:
-                (json['secrets'] as List<dynamic>)
+                secrets
                     .map((e) => Secret.fromJson(e as Map<String, dynamic>))
                     .toList(),
           )

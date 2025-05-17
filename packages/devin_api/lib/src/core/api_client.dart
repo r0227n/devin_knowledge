@@ -89,15 +89,20 @@ class DevinApiClient {
   /// Handles the HTTP response and throws an exception if an error occurs
   Map<String, dynamic> _handleResponse(http.Response response) {
     final statusCode = response.statusCode;
-    final responseBody =
-        response.body.isNotEmpty
-            ? jsonDecode(response.body) as Map<String, dynamic>
-            : <String, dynamic>{};
-
-    print(responseBody);
+    final responseBody = jsonDecode(response.body);
 
     if (statusCode >= 200 && statusCode < 300) {
-      return responseBody;
+      return switch (responseBody) {
+        Map<String, dynamic> _ => responseBody,
+        List<dynamic> _ => {"secrets": responseBody},
+        _ =>
+          throw DevinApiException(
+            statusCode: statusCode,
+            message: 'Invalid response body',
+            errorCode: 'INVALID_RESPONSE_BODY',
+            response: responseBody,
+          ),
+      };
     }
 
     // Handle error responses
