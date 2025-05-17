@@ -3,9 +3,27 @@ import '../core/api_constants.dart';
 import '../models/knowledge.dart';
 import '../models/list_response.dart';
 
+/// Abstract interface for interacting with the Knowledge API
+/// API Documentation: https://docs.devin.ai/api-reference/overview#knowledge
+sealed class KnowledgeServiceBase {
+  /// Gets all knowledge and folders in your current organization.
+  /// This endpoint will not return system knowledge
+  /// (repo indexes or built-in knowledge) managed by Cognition.
+  Future<ListResponse<KnowledgeResponse>> list();
+
+  /// Create a new piece of knowledge.
+  Future<Knowledge> create(CreateKnowledgeRequest data);
+
+  /// Update the name, body, or trigger of a piece of knowledge.
+  Future<Knowledge> update(String id, CreateKnowledgeRequest data);
+
+  /// Permanently delete a piece of knowledge by its ID. This action cannot be undone.
+  Future<void> delete(String id);
+}
+
 /// Knowledge Endpoints
 /// API Documentation: https://docs.devin.ai/api-reference/overview#knowledge
-class KnowledgeService {
+class KnowledgeService implements KnowledgeServiceBase {
   /// Creates a new [KnowledgeService]
   const KnowledgeService({required DevinApiClient apiClient})
     : _apiClient = apiClient;
@@ -13,16 +31,14 @@ class KnowledgeService {
   /// The API client
   final DevinApiClient _apiClient;
 
-  /// Lists all knowledge items
-  /// Endpoint: GET /api/knowledge
+  @override
   Future<ListResponse<KnowledgeResponse>> list() async {
     final response = await _apiClient.get(DevinApiConstants.knowledge);
 
     return ListResponse<KnowledgeResponse>.fromJson(response);
   }
 
-  /// Creates a new knowledge item
-  /// Endpoint: POST /api/knowledge
+  @override
   Future<Knowledge> create(CreateKnowledgeRequest data) async {
     final response = await _apiClient.post(
       DevinApiConstants.knowledge,
@@ -32,8 +48,7 @@ class KnowledgeService {
     return Knowledge.fromJson(response);
   }
 
-  /// Updates a knowledge item
-  /// Endpoint: PUT /api/knowledge/{id}
+  @override
   Future<Knowledge> update(String id, CreateKnowledgeRequest data) async {
     final response = await _apiClient.put(
       '${DevinApiConstants.knowledge}/$id',
@@ -43,8 +58,7 @@ class KnowledgeService {
     return Knowledge.fromJson(response);
   }
 
-  /// Deletes a knowledge item by ID
-  /// Endpoint: DELETE /api/knowledge/{id}
+  @override
   Future<void> delete(String id) async {
     await _apiClient.delete('${DevinApiConstants.knowledge}/$id');
   }
