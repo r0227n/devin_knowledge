@@ -1,4 +1,3 @@
-import 'package:devin_api/devin_api.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -15,32 +14,24 @@ void main() {
       // TODO: Implement test for retrive
     });
 
-    test('Knowledge service - list returns a paginated list of knowledge items',
+    test(
+      'Knowledge service - list returns a paginated list of knowledge items',
       () async {
         // TODO: Implement test for list
       },
     );
 
-    test(
-      'Knowledge service - get returns a knowledge item by ID',
-      () async {
-        // TODO: Implement test for get
-      },
-    );
+    test('Knowledge service - get returns a knowledge item by ID', () async {
+      // TODO: Implement test for get
+    });
 
-    test(
-      'Knowledge service - create creates a new knowledge item',
-      () async {
-        // TODO: Implement test for create
-      },
-    );
+    test('Knowledge service - create creates a new knowledge item', () async {
+      // TODO: Implement test for create
+    });
 
-    test(
-      'Secret service - list returns a paginated list of secrets',
-      () async {
-        // TODO: Implement test for list
-      },
-    );
+    test('Secret service - list returns a paginated list of secrets', () async {
+      // TODO: Implement test for list
+    });
 
     test(
       'Error handling - throws DevinApiException on error response',
