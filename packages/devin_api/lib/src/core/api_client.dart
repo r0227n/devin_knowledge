@@ -91,8 +91,6 @@ class DevinApiClient {
     final statusCode = response.statusCode;
     final responseBody = jsonDecode(response.body);
 
-    print(response.body);
-
     if (statusCode >= 200 && statusCode < 300) {
       return switch (responseBody) {
         Map<String, dynamic> _ => responseBody,
