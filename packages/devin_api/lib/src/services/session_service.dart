@@ -55,7 +55,7 @@ class SessionService implements SessionServiceBase {
   }) async {
     final List<String> validatedArgs = [];
 
-    if (1 <= limit && limit <= 100) {
+    if (1 <= limit && limit <= 1000) {
       validatedArgs.add('Limit must be between 1 and 100');
     }
 
