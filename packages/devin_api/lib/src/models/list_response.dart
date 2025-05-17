@@ -10,26 +10,35 @@ class ListResponse<T> {
   final List<T> items;
 
   factory ListResponse.fromJson(Map<String, dynamic> json) {
-    return ListResponse<T>(
-      items:
-          switch (T) {
-                Session() =>
-                  (json['sessions'] as List<dynamic>)
-                      .map((e) => Session.fromJson(e as Map<String, dynamic>))
-                      .toList(),
-                Secret() =>
-                  (json['secrets'] as List<dynamic>)
-                      .map((e) => Secret.fromJson(e as Map<String, dynamic>))
-                      .toList(),
-                KnowledgeResponse() => KnowledgeResponse.fromJson(json),
-                _ =>
-                  throw ArgumentError.value(
-                    T,
-                    T.toString(),
-                    'Unsupported type: $T',
-                  ),
-              }
-              as List<T>,
-    );
+    if (T == Session) {
+      return ListResponse<Session>(
+            items:
+                (json['sessions'] as List<dynamic>)
+                    .map((e) => Session.fromJson(e as Map<String, dynamic>))
+                    .toList(),
+          )
+          as ListResponse<T>;
+    } else if (T == Secret) {
+      return ListResponse<Secret>(
+            items:
+                (json['secrets'] as List<dynamic>)
+                    .map((e) => Secret.fromJson(e as Map<String, dynamic>))
+                    .toList(),
+          )
+          as ListResponse<T>;
+    } else if (T == KnowledgeResponse) {
+      return ListResponse<KnowledgeResponse>(
+            items:
+                (json['knowledge'] as List<dynamic>)
+                    .map(
+                      (e) =>
+                          KnowledgeResponse.fromJson(e as Map<String, dynamic>),
+                    )
+                    .toList(),
+          )
+          as ListResponse<T>;
+    }
+
+    throw ArgumentError.value(T, T.toString(), 'Unsupported type: $T');
   }
 }

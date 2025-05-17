@@ -26,7 +26,7 @@ class DevinApiClient {
     Map<String, String>? queryParameters,
   }) async {
     final uri = Uri.parse(
-      '${DevinApiConstants.baseUrl}$endpoint',
+      '${DevinApiConstants.baseUrl}/$endpoint',
     ).replace(queryParameters: queryParameters);
 
     final response = await _httpClient.get(uri, headers: _createHeaders());
@@ -93,6 +93,8 @@ class DevinApiClient {
         response.body.isNotEmpty
             ? jsonDecode(response.body) as Map<String, dynamic>
             : <String, dynamic>{};
+
+    print(responseBody);
 
     if (statusCode >= 200 && statusCode < 300) {
       return responseBody;

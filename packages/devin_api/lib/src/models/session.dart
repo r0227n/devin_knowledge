@@ -79,7 +79,8 @@ class Detail {
 enum StatusEnum {
   running('RUNNING'),
   blocked('blocked'),
-  stopped('stopped');
+  stopped('stopped'),
+  finished('finished');
 
   const StatusEnum(this.key);
 
@@ -101,7 +102,7 @@ class Session {
   const Session({
     required this.sessionId,
     required this.status,
-    required this.title,
+    this.title,
     required this.createdAt,
     required this.updatedAt,
     this.snapshotId,
@@ -120,7 +121,7 @@ class Session {
   final String status;
 
   /// Title or description of the sessionn
-  final String title;
+  final String? title;
 
   /// Timestamp when the session was created
   final DateTime createdAt;
@@ -153,12 +154,12 @@ class Session {
     return Session(
       sessionId: json['session_id'] as String,
       status: json['status'] as String,
-      title: json['title'] as String,
+      title: json['title'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
       snapshotId: json['snapshot_id'] as String?,
       playbookId: json['playbook_id'] as String?,
-      tags: json['tags'] as List<String>?,
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       pullRequest:
           json['pull_request'] != null
               ? PullRequest.fromJson(
