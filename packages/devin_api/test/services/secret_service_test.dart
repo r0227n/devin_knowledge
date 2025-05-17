@@ -8,7 +8,7 @@ void main() {
   setUpAll(() {
     registerFallbackValues();
   });
-  
+
   group('SecretService', () {
     late MockHttpClient mockHttpClient;
     late MockResponse mockResponse;
@@ -26,12 +26,14 @@ void main() {
 
       when(() => mockResponse.statusCode).thenReturn(200);
       when(() => mockResponse.body).thenReturn('{}');
-      
+
       // Setup mock HTTP client to return a response
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.delete(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.delete(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
     });
 
     group('list', () {
@@ -69,7 +71,9 @@ void main() {
 
         verify(
           () => mockHttpClient.get(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}',
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -84,7 +88,9 @@ void main() {
         // Assert
         verify(
           () => mockHttpClient.delete(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}/secret-1'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.secrets}/secret-1',
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);

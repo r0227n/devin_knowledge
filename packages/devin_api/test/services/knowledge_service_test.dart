@@ -8,7 +8,7 @@ void main() {
   setUpAll(() {
     registerFallbackValues();
   });
-  
+
   group('KnowledgeService', () {
     late MockHttpClient mockHttpClient;
     late MockResponse mockResponse;
@@ -26,16 +26,28 @@ void main() {
 
       when(() => mockResponse.statusCode).thenReturn(200);
       when(() => mockResponse.body).thenReturn('{}');
-      
+
       // Setup mock HTTP client to return a response
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.put(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.delete(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.put(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.delete(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
     });
 
     group('list', () {
@@ -66,8 +78,8 @@ void main() {
               'name': 'Test Folder',
               'description': 'Test Folder Description',
               'created_at': '2023-01-01T00:00:00Z',
-            }
-          ]
+            },
+          ],
         };
 
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
@@ -87,7 +99,9 @@ void main() {
 
         verify(
           () => mockHttpClient.get(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}',
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -128,7 +142,9 @@ void main() {
 
         verify(
           () => mockHttpClient.post(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}',
+            ),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
@@ -170,7 +186,9 @@ void main() {
 
         verify(
           () => mockHttpClient.put(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1',
+            ),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
@@ -186,7 +204,9 @@ void main() {
         // Assert
         verify(
           () => mockHttpClient.delete(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.knowledge}/knowledge-1',
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);

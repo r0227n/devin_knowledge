@@ -8,7 +8,7 @@ void main() {
   setUpAll(() {
     registerFallbackValues();
   });
-  
+
   group('SessionService', () {
     late MockHttpClient mockHttpClient;
     late MockResponse mockResponse;
@@ -26,16 +26,28 @@ void main() {
 
       when(() => mockResponse.statusCode).thenReturn(200);
       when(() => mockResponse.body).thenReturn('{}');
-      
+
       // Setup mock HTTP client to return a response
-      when(() => mockHttpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.post(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.put(any(), headers: any(named: 'headers'), body: any(named: 'body')))
-          .thenAnswer((_) async => mockResponse);
-      when(() => mockHttpClient.delete(any(), headers: any(named: 'headers')))
-          .thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.post(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.put(
+          any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'),
+        ),
+      ).thenAnswer((_) async => mockResponse);
+      when(
+        () => mockHttpClient.delete(any(), headers: any(named: 'headers')),
+      ).thenAnswer((_) async => mockResponse);
     });
 
     group('list', () {
@@ -72,11 +84,16 @@ void main() {
 
         verify(
           () => mockHttpClient.get(
-            any(that: predicate<Uri>((uri) => 
-              uri.toString().startsWith('${DevinApiConstants.baseUrl}/${DevinApiConstants.sessions}') &&
-              uri.queryParameters['limit'] == '10' &&
-              uri.queryParameters['offset'] == '0'
-            )),
+            any(
+              that: predicate<Uri>(
+                (uri) =>
+                    uri.toString().startsWith(
+                      '${DevinApiConstants.baseUrl}/${DevinApiConstants.sessions}',
+                    ) &&
+                    uri.queryParameters['limit'] == '10' &&
+                    uri.queryParameters['offset'] == '0',
+              ),
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -101,7 +118,7 @@ void main() {
 
         // Act
         final result = await sessionService.list(
-          limit: 10, 
+          limit: 10,
           offset: 0,
           tags: ['tag1', 'tag2'],
         );
@@ -113,12 +130,17 @@ void main() {
 
         verify(
           () => mockHttpClient.get(
-            any(that: predicate<Uri>((uri) => 
-              uri.toString().startsWith('${DevinApiConstants.baseUrl}/${DevinApiConstants.sessions}') &&
-              uri.queryParameters['limit'] == '10' &&
-              uri.queryParameters['offset'] == '0' &&
-              uri.queryParameters['tags'] == 'tag1,tag2'
-            )),
+            any(
+              that: predicate<Uri>(
+                (uri) =>
+                    uri.toString().startsWith(
+                      '${DevinApiConstants.baseUrl}/${DevinApiConstants.sessions}',
+                    ) &&
+                    uri.queryParameters['limit'] == '10' &&
+                    uri.queryParameters['offset'] == '0' &&
+                    uri.queryParameters['tags'] == 'tag1,tag2',
+              ),
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -156,7 +178,9 @@ void main() {
 
         verify(
           () => mockHttpClient.get(
-            Uri.parse('${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1'),
+            Uri.parse(
+              '${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1',
+            ),
             headers: any(named: 'headers'),
           ),
         ).called(1);
@@ -173,9 +197,13 @@ void main() {
         // Assert
         verify(
           () => mockHttpClient.post(
-            any(that: predicate<Uri>((uri) => 
-              uri.toString() == '${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1/message'
-            )),
+            any(
+              that: predicate<Uri>(
+                (uri) =>
+                    uri.toString() ==
+                    '${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1/message',
+              ),
+            ),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
@@ -186,21 +214,23 @@ void main() {
     group('updateTags', () {
       test('updates tags for a session', () async {
         // Arrange
-        final responseJson = {
-          'detail': 'Tags updated successfully'
-        };
-        
+        final responseJson = {'detail': 'Tags updated successfully'};
+
         when(() => mockResponse.body).thenReturn(jsonEncode(responseJson));
-        
+
         // Act
         await sessionService.updateTags('session-1', ['tag1', 'tag2']);
 
         // Assert
         verify(
           () => mockHttpClient.put(
-            any(that: predicate<Uri>((uri) => 
-              uri.toString() == '${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1/tags'
-            )),
+            any(
+              that: predicate<Uri>(
+                (uri) =>
+                    uri.toString() ==
+                    '${DevinApiConstants.baseUrl}/${DevinApiConstants.session}/session-1/tags',
+              ),
+            ),
             headers: any(named: 'headers'),
             body: any(named: 'body'),
           ),
