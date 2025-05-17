@@ -21,7 +21,7 @@ class DevinApiClient {
   }
 
   /// Makes a GET request to the specified [endpoint]
-  Future<Map<String, dynamic>> get(
+  Future<Map<String, dynamic>?> get(
     String endpoint, {
     Map<String, String>? queryParameters,
   }) async {
@@ -35,7 +35,7 @@ class DevinApiClient {
   }
 
   /// Makes a POST request to the specified [endpoint] with the given [body]
-  Future<Map<String, dynamic>> post(
+  Future<Map<String, dynamic>?> post(
     String endpoint, {
     Map<String, String>? additionalHeaders,
     Map<String, dynamic>? body,
@@ -52,7 +52,7 @@ class DevinApiClient {
   }
 
   /// Makes a PUT request to the specified [endpoint] with the given [body]
-  Future<Map<String, dynamic>> put(
+  Future<Map<String, dynamic>?> put(
     String endpoint, {
     Map<String, dynamic>? body,
   }) async {
@@ -68,7 +68,7 @@ class DevinApiClient {
   }
 
   /// Makes a DELETE request to the specified [endpoint]
-  Future<Map<String, dynamic>> delete(String endpoint) async {
+  Future<Map<String, dynamic>?> delete(String endpoint) async {
     final uri = Uri.parse('${DevinApiConstants.baseUrl}/$endpoint');
 
     final response = await _httpClient.delete(uri, headers: _createHeaders());
@@ -87,14 +87,17 @@ class DevinApiClient {
   }
 
   /// Handles the HTTP response and throws an exception if an error occurs
-  Map<String, dynamic> _handleResponse(http.Response response) {
+  Map<String, dynamic>? _handleResponse(http.Response response) {
     final statusCode = response.statusCode;
     final responseBody = jsonDecode(response.body);
+
+    print(response.body);
 
     if (statusCode >= 200 && statusCode < 300) {
       return switch (responseBody) {
         Map<String, dynamic> _ => responseBody,
         List<dynamic> _ => {"secrets": responseBody},
+        null => null,
         _ =>
           throw DevinApiException(
             statusCode: statusCode,

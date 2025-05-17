@@ -101,10 +101,10 @@ enum StatusEnum {
 class Session {
   const Session({
     required this.sessionId,
-    required this.status,
+    this.status,
     this.title,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     this.snapshotId,
     this.playbookId,
     this.tags,
@@ -118,16 +118,16 @@ class Session {
   final String sessionId;
 
   /// Current status of the session
-  final String status;
+  final String? status;
 
   /// Title or description of the sessionn
   final String? title;
 
   /// Timestamp when the session was created
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   /// Timestamp when the session was last updated
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   /// ID of the associated snapshot, if any
   final String? snapshotId;
@@ -153,10 +153,10 @@ class Session {
   factory Session.fromJson(Map<String, dynamic> json) {
     return Session(
       sessionId: json['session_id'] as String,
-      status: json['status'] as String,
+      status: json['status'] as String?,
       title: json['title'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
+      createdAt: DateTime.tryParse(json['created_at'] as String? ?? ''),
+      updatedAt: DateTime.tryParse(json['updated_at'] as String? ?? ''),
       snapshotId: json['snapshot_id'] as String?,
       playbookId: json['playbook_id'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -183,17 +183,18 @@ class Session {
   Map<String, dynamic> toJson() {
     return {
       'session_id': sessionId,
-      'status': status,
-      'title': title,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'snapshot_id': snapshotId,
-      'playbook_id': playbookId,
-      'tags': tags,
-      'pull_request': pullRequest?.toJson(),
-      'structured_output': structuredOutput,
-      'status_enum': statusEnum?.key,
-      'messages': messages?.map((e) => e.toJson()).toList(),
+      if (status != null) 'status': status,
+      if (title != null) 'title': title,
+      if (createdAt != null) 'created_at': createdAt!.toIso8601String(),
+      if (updatedAt != null) 'updated_at': updatedAt!.toIso8601String(),
+      if (snapshotId != null) 'snapshot_id': snapshotId,
+      if (playbookId != null) 'playbook_id': playbookId,
+      if (tags != null) 'tags': tags,
+      if (pullRequest != null) 'pull_request': pullRequest!.toJson(),
+      if (structuredOutput != null) 'structured_output': structuredOutput,
+      if (statusEnum != null) 'status_enum': statusEnum!.key,
+      if (messages != null)
+        'messages': messages!.map((e) => e.toJson()).toList(),
     };
   }
 }
@@ -256,14 +257,14 @@ class CreateSessionRequest {
   Map<String, dynamic> toJson() {
     return {
       'prompt': prompt,
-      'snapshot_id': snapshotId,
-      'unlisted': unlisted,
-      'idempotent': idempotent,
-      'max_acu_limit': maxAcuLimit,
-      'secret_ids': secretIds,
-      'knowledge_ids': knowledgeIds,
-      'tags': tags,
-      'title': title,
+      if (snapshotId != null) 'snapshot_id': snapshotId,
+      if (unlisted != null) 'unlisted': unlisted,
+      if (idempotent != null) 'idempotent': idempotent,
+      if (maxAcuLimit != null) 'max_acu_limit': maxAcuLimit,
+      if (secretIds != null) 'secret_ids': secretIds,
+      if (knowledgeIds != null) 'knowledge_ids': knowledgeIds,
+      if (tags != null) 'tags': tags,
+      if (title != null) 'title': title,
     };
   }
 }
