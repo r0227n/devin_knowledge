@@ -120,7 +120,7 @@ class Session {
   /// Current status of the session
   final String? status;
 
-  /// Title or description of the sessionn
+  /// Title or description of the session
   final String? title;
 
   /// Timestamp when the session was created
