@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Pkg DevinApi Example",
+            "program": "packages/devin_api/example/devin_api_example.dart",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "dev"
+            ],
+        }
+    ]
+}
