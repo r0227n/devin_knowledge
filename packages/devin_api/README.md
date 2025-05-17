@@ -36,7 +36,7 @@ void main() async {
 
     // Create a new session
     final newSession = await client.sessions.create(
-      CreateSessionRequest(name: 'Test Session'),
+      CreateSessionRequest(prompt: 'Test Session'),
     );
     print('Created session: ${newSession.id}');
   } on DevinApiException catch (e) {
