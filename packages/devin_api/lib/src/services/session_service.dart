@@ -24,7 +24,7 @@ sealed class SessionServiceBase {
 
   /// Retrieve detailed information about an existing Devin session,
   /// including its status, output, and metadata.
-  Future<Session> retrive(String id);
+  Future<Session> retrieve(String id);
 
   /// Send a message to an existing Devin session
   /// to provide additional instructions or information.
@@ -110,7 +110,7 @@ class SessionService implements SessionServiceBase {
   }
 
   @override
-  Future<Session> retrive(String id) async {
+  Future<Session> retrieve(String id) async {
     final response = await _apiClient.get('${DevinApiConstants.session}/$id');
 
     if (response == null) {
