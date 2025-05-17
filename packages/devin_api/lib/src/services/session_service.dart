@@ -7,6 +7,10 @@ import '../models/list_response.dart';
 /// API Documentation: https://docs.devin.ai/api-reference/overview#sessions
 sealed class SessionServiceBase {
   /// List all Devin sessions for your organization.
+  ///
+  /// [limit] - Maximum number of sessions to return per page
+  /// [offset] - Number of sessions to skip for pagination
+  /// [tags] - Filter sessions by tags
   Future<ListResponse<Session>> list({
     int limit = 100,
     int offset = 0,
