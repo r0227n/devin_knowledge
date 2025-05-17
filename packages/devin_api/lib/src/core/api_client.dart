@@ -37,6 +37,7 @@ class DevinApiClient {
   /// Makes a POST request to the specified [endpoint] with the given [body]
   Future<Map<String, dynamic>> post(
     String endpoint, {
+    Map<String, String>? additionalHeaders,
     Map<String, dynamic>? body,
   }) async {
     final uri = Uri.parse('${DevinApiConstants.baseUrl}$endpoint');
@@ -76,8 +77,9 @@ class DevinApiClient {
   }
 
   /// Creates the headers for the API request
-  Map<String, String> _createHeaders() {
+  Map<String, String> _createHeaders({Map<String, String>? additionalHeaders}) {
     return {
+      if (additionalHeaders != null) ...additionalHeaders,
       'Content-Type': 'application/json',
       DevinApiConstants.authHeaderKey:
           '${DevinApiConstants.authHeaderValuePrefix}$apiKey',

@@ -118,6 +118,15 @@ class CreateKnowledgeRequest {
       parentFolderId: json['parent_folder_id'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'body': body,
+      'name': name,
+      'trigger_description': triggerDescription,
+      'parent_folder_id': parentFolderId,
+    };
+  }
 }
 
 class KnowledgeResponse {
