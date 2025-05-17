@@ -28,13 +28,7 @@ class ListResponse<T> {
           as ListResponse<T>;
     } else if (T == KnowledgeResponse) {
       return ListResponse<KnowledgeResponse>(
-            items:
-                (json['knowledge'] as List<dynamic>)
-                    .map(
-                      (e) =>
-                          KnowledgeResponse.fromJson(e as Map<String, dynamic>),
-                    )
-                    .toList(),
+            items: [KnowledgeResponse.fromJson(json)],
           )
           as ListResponse<T>;
     }

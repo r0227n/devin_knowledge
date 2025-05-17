@@ -23,7 +23,7 @@ class Knowledge {
   final String triggerDescription;
 
   /// The id of the folder that this knowledge is located in. Null if the knowledge is not located in any folder
-  final String parentFolderId;
+  final String? parentFolderId;
 
   /// Creation timestamp (ISO 8601)
   final DateTime createdAt;
@@ -34,7 +34,7 @@ class Knowledge {
       name: json['name'] as String,
       body: json['body'] as String,
       triggerDescription: json['trigger_description'] as String,
-      parentFolderId: json['parent_folder_id'] as String,
+      parentFolderId: json['parent_folder_id'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -139,13 +139,14 @@ class KnowledgeResponse {
   final List<Folder> folders;
 
   factory KnowledgeResponse.fromJson(Map<String, dynamic> json) {
+    print(json.keys);
     return KnowledgeResponse(
       knowledge:
-          (json['knowledge'] as List<dynamic>)
+          (json['knowledge'] as List<dynamic>? ?? const <dynamic>[])
               .map((e) => Knowledge.fromJson(e as Map<String, dynamic>))
               .toList(),
       folders:
-          (json['folders'] as List<dynamic>)
+          (json['folders'] as List<dynamic>? ?? const <dynamic>[])
               .map((e) => Folder.fromJson(e as Map<String, dynamic>))
               .toList(),
     );
