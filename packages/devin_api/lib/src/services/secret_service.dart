@@ -1,5 +1,6 @@
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
+import '../core/api_exception.dart';
 import '../models/secret.dart';
 import '../models/list_response.dart';
 
@@ -26,6 +27,15 @@ class SecretService implements SecretServiceBase {
   @override
   Future<ListResponse<Secret>> list() async {
     final response = await _apiClient.get(DevinApiConstants.secrets);
+
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No secrets found',
+        errorCode: 'NO_SECRETS_FOUND',
+        response: null,
+      );
+    }
 
     return ListResponse<Secret>.fromJson(response);
   }

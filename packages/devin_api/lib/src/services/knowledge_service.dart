@@ -1,5 +1,6 @@
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
+import '../core/api_exception.dart';
 import '../models/knowledge.dart';
 import '../models/list_response.dart';
 
@@ -35,6 +36,15 @@ class KnowledgeService implements KnowledgeServiceBase {
   Future<ListResponse<KnowledgeResponse>> list() async {
     final response = await _apiClient.get(DevinApiConstants.knowledge);
 
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No knowledge found',
+        errorCode: 'NO_KNOWLEDGE_FOUND',
+        response: null,
+      );
+    }
+
     return ListResponse<KnowledgeResponse>.fromJson(response);
   }
 
@@ -45,6 +55,14 @@ class KnowledgeService implements KnowledgeServiceBase {
       body: request.toJson(),
     );
 
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No knowledge found',
+        errorCode: 'NO_KNOWLEDGE_FOUND',
+        response: null,
+      );
+    }
     return Knowledge.fromJson(response);
   }
 
@@ -54,6 +72,15 @@ class KnowledgeService implements KnowledgeServiceBase {
       '${DevinApiConstants.knowledge}/$id',
       body: request.toJson(),
     );
+
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No knowledge found',
+        errorCode: 'NO_KNOWLEDGE_FOUND',
+        response: null,
+      );
+    }
 
     return Knowledge.fromJson(response);
   }

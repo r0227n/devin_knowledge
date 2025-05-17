@@ -1,5 +1,6 @@
 import '../core/api_client.dart';
 import '../core/api_constants.dart';
+import '../core/api_exception.dart';
 import '../models/session.dart';
 import '../models/list_response.dart';
 
@@ -29,9 +30,9 @@ sealed class SessionServiceBase {
   /// to provide additional instructions or information.
   Future<void> send(String sessionId, String message);
 
-  /// Upload files for Devin to work with during sessions.
-  /// Supports various file types including code, data, and documentation files.
-  Future<void> upload(String filePath);
+  // /// Upload files for Devin to work with during sessions.
+  // /// Supports various file types including code, data, and documentation files.
+  // Future<void> upload(String filePath);
 
   /// Update the tags associated with a Devin session.
   Future<Detail> updateTags(String id, List<String> tags);
@@ -77,6 +78,15 @@ class SessionService implements SessionServiceBase {
       },
     );
 
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No sessions found',
+        errorCode: 'NO_SESSIONS_FOUND',
+        response: null,
+      );
+    }
+
     return ListResponse<Session>.fromJson(response);
   }
 
@@ -87,12 +97,30 @@ class SessionService implements SessionServiceBase {
       body: request.toJson(),
     );
 
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No session found',
+        errorCode: 'NO_SESSION_FOUND',
+        response: null,
+      );
+    }
+
     return Session.fromJson(response);
   }
 
   @override
   Future<Session> retrive(String id) async {
     final response = await _apiClient.get('${DevinApiConstants.session}/$id');
+
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No session found',
+        errorCode: 'NO_SESSION_FOUND',
+        response: null,
+      );
+    }
 
     return Session.fromJson(response);
   }
@@ -105,15 +133,14 @@ class SessionService implements SessionServiceBase {
     );
   }
 
-  // TODO: Test this
-  @override
-  Future<void> upload(String filePath) async {
-    await _apiClient.post(
-      DevinApiConstants.attachments,
-      additionalHeaders: {'Content-Type': 'multipart/form-data'},
-      body: {'file': filePath},
-    );
-  }
+  // @override
+  // Future<void> upload(String filePath) async {
+  //   await _apiClient.post(
+  //     DevinApiConstants.attachments,
+  //     additionalHeaders: {'Content-Type': 'multipart/form-data'},
+  //     body: {'file': filePath},
+  //   );
+  // }
 
   @override
   Future<Detail> updateTags(String id, List<String> tags) async {
@@ -121,6 +148,15 @@ class SessionService implements SessionServiceBase {
       '${DevinApiConstants.session}/$id/tags',
       body: {'tags': tags},
     );
+
+    if (response == null) {
+      throw DevinApiException(
+        statusCode: 404,
+        message: 'No session found',
+        errorCode: 'NO_SESSION_FOUND',
+        response: null,
+      );
+    }
 
     return Detail.fromJson(response);
   }
